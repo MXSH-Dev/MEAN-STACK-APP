@@ -1,6 +1,9 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Post } from '../../../Models/post.model';
+import { PostsService } from '../../../services/posts.service';
 
 @Component({
   selector: 'app-post-create',
@@ -8,21 +11,44 @@ import { Post } from '../../../Models/post.model';
   styleUrls: ['./post-create.component.css'],
 })
 export class PostCreateComponent implements OnInit {
-  enteredTitle = '';
-  enteredContent = '';
+  public postFormGroup = new FormGroup({
+    title: new FormControl('', [Validators.required]),
+    content: new FormControl('', [Validators.required]),
+  });
+  public showError: boolean = false;
 
-  @Output() postCreated = new EventEmitter();
-
-  constructor() {}
+  constructor(
+    private _snackBar: MatSnackBar,
+    private postService: PostsService
+  ) {}
 
   ngOnInit(): void {}
 
   onAddPost() {
+    if (!this.postFormGroup.valid) {
+      this.openSnackBar('Please Enter Valid Data!', 'OK');
+      this.showError = true;
+      return;
+    }
     const post: Post = {
-      title: this.enteredTitle,
-      content: this.enteredContent,
+      title: this.postFormGroup.value.title,
+      content: this.postFormGroup.value.content,
     };
-    // alert('post added!');
-    this.postCreated.emit(post);
+
+    this.postService.addPost(post);
+    this.showError = false;
+    this.postFormGroup.reset('');
+  }
+
+  getFormControl(controlName: string) {
+    return this.postFormGroup.get(controlName);
+  }
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 2000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+    });
   }
 }

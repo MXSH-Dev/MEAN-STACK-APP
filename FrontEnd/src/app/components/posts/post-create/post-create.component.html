@@ -1,18 +1,35 @@
 <mat-card>
-  <mat-form-field>
-    <input matInput type="text" [(ngModel)]="enteredTitle" />
-  </mat-form-field>
-
-  <mat-form-field>
-    <textarea
-      matInput
-      cols="30"
-      rows="6"
-      [(ngModel)]="enteredContent"
-    ></textarea>
-  </mat-form-field>
-
-  <button mat-raised-button color="accent" (click)="onAddPost()">
-    Save Post
-  </button>
+  <form [formGroup]="postFormGroup" (ngSubmit)="onAddPost()">
+    <mat-form-field>
+      <!-- <mat-label>Title</mat-label> -->
+      <input matInput placeholder="Title" type="text" formControlName="title" />
+    </mat-form-field>
+    <mat-error
+      *ngIf="
+        (getFormControl('title').dirty &&
+          getFormControl('title').hasError('required')) ||
+        showError
+      "
+      >Title is required!</mat-error
+    >
+    <mat-form-field>
+      <!-- <mat-label>Content</mat-label> -->
+      <textarea
+        matInput
+        placeholder="Post Content"
+        cols="30"
+        rows="6"
+        formControlName="content"
+      ></textarea>
+      <mat-error
+        *ngIf="
+          (getFormControl('content').dirty &&
+            getFormControl('content').hasError('required')) ||
+          showError
+        "
+        >Content can not be empty!</mat-error
+      >
+    </mat-form-field>
+    <button mat-raised-button color="accent" type="submit">Save Post</button>
+  </form>
 </mat-card>

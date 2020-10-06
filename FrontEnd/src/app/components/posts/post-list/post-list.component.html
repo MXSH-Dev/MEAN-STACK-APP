@@ -7,9 +7,24 @@
       </mat-panel-description> -->
     </mat-expansion-panel-header>
     <p>{{ post.content }}</p>
+    <mat-action-row>
+      <button mat-raised-button color="accent" style="width: 25%">EDIT</button>
+      <button mat-raised-button color="warn" style="width: 25%">DELETE</button>
+    </mat-action-row>
   </mat-expansion-panel>
 </mat-accordion>
-
+<!-- <mat-grid-list cols="4" rowHeight="50px">
+  <mat-grid-tile
+    ><button mat-raised-button color="accent" style="width: 95%">
+      EDIT
+    </button></mat-grid-tile
+  >
+  <mat-grid-tile
+    ><button mat-raised-button color="primary" style="width: 95%">
+      DELETE
+    </button></mat-grid-tile
+  >
+</mat-grid-list> -->
 <p *ngIf="!posts || (posts && posts.length === 0)" class="mat-body-1 info-text">
   No posts added yet!
 </p>
