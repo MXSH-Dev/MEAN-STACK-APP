@@ -1,0 +1,15 @@
+<mat-accordion multi="true" *ngIf="posts && posts.length > 0">
+  <mat-expansion-panel hideToggle *ngFor="let post of posts">
+    <mat-expansion-panel-header>
+      <mat-panel-title> {{ post.title }}</mat-panel-title>
+      <!-- <mat-panel-description>
+        This is a summary of the content
+      </mat-panel-description> -->
+    </mat-expansion-panel-header>
+    <p>{{ post.content }}</p>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<p *ngIf="!posts || (posts && posts.length === 0)" class="mat-body-1 info-text">
+  No posts added yet!
+</p>
