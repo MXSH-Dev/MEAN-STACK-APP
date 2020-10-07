@@ -31,7 +31,7 @@
   MONGODB_URI_POST = "@mean-cluster.qyd3m.mongodb.net/mean-stack?retryWrites=true&w=majority"
   ```
 
-  - IT is ok to expose username and password by accident since only certain IP is added to IP while list
+  - It is ok to expose username and password by accident since only certain IP is added to IP while list
 
   - If not using mongodb atlas, please modify `BackEnd/app.js` file to configure mongodb correctly
 
