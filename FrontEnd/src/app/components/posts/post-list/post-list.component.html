@@ -7,6 +7,14 @@
         This is a summary of the content
       </mat-panel-description> -->
     </mat-expansion-panel-header>
+    <mat-card>
+      <img
+        mat-card-image
+        [src]="post.imagePath"
+        alt="IMAGE"
+        style="display: flex; margin: auto; max-width: 400px"
+      />
+    </mat-card>
     <p>{{ post.content }}</p>
     <mat-action-row>
       <a
@@ -27,6 +35,15 @@
     </mat-action-row>
   </mat-expansion-panel>
 </mat-accordion>
+<mat-paginator
+  *ngIf="posts.length > 0"
+  [length]="paginatorConfig.length"
+  [pageSize]="paginatorConfig.pageSize"
+  [pageSizeOptions]="paginatorConfig.pageSizeOptions"
+  (page)="onChangedPage($event)"
+  style="margin-top: 1rem"
+>
+</mat-paginator>
 <!-- <mat-grid-list cols="4" rowHeight="50px">
   <mat-grid-tile
     ><button mat-raised-button color="accent" style="width: 95%">

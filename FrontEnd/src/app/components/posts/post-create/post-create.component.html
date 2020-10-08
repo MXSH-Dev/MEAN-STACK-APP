@@ -17,6 +17,41 @@
       "
       >Title is required!</mat-error
     >
+
+    <input
+      #postImagePicker
+      (change)="onImagePicked($event)"
+      type="file"
+      style="visibility: hidden"
+    />
+    <mat-card>
+      <img
+        *ngIf="imgPreviewUrl"
+        mat-card-image
+        [src]="imgPreviewUrl"
+        alt="IMAGE"
+        style="display: flex; margin: auto; width: 90%"
+      />
+      <mat-card-actions>
+        <div style="display: inline-block; width: 50%">
+          <button
+            mat-flat-button
+            type="button"
+            (click)="postImagePicker.click($event)"
+            style="width: 90%"
+            color="accent"
+          >
+            Pick Image
+          </button>
+        </div>
+        <div style="display: inline-block; width: 50%">
+          <button mat-flat-button type="button" style="width: 90%" color="warn">
+            Reset Image
+          </button>
+        </div>
+      </mat-card-actions>
+    </mat-card>
+
     <mat-form-field>
       <!-- <mat-label>Content</mat-label> -->
       <textarea
@@ -35,6 +70,8 @@
         >Content can not be empty!</mat-error
       >
     </mat-form-field>
-    <button mat-raised-button color="accent" type="submit">Save Post</button>
+    <button mat-raised-button color="primary" type="submit" style="width: 100%">
+      Save Post
+    </button>
   </form>
 </mat-card>

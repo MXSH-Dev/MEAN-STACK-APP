@@ -11,6 +11,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -42,6 +43,7 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
     MatGridListModule,
     HttpClientModule,
     MatProgressSpinnerModule,
+    MatPaginatorModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
