@@ -1,0 +1,45 @@
+<br />
+<mat-card style="max-width: 50rem; display: block; margin: auto">
+  <app-spinner *ngIf="isLoading"></app-spinner>
+  <form *ngIf="!isLoading" [formGroup]="loginForm" (ngSubmit)="login()">
+    <mat-form-field>
+      <!-- <mat-label>Title</mat-label> -->
+      <input
+        matInput
+        placeholder="E-mail"
+        type="email"
+        formControlName="email"
+      />
+    </mat-form-field>
+    <mat-error
+      *ngIf="
+        (getFormControl('email').touched &&
+          getFormControl('email').hasError('required')) ||
+        (getFormControl('email').touched &&
+          getFormControl('email').hasError('email'))
+      "
+      >Please enter a valid email!</mat-error
+    >
+
+    <mat-form-field>
+      <!-- <mat-label>Title</mat-label> -->
+      <input
+        matInput
+        placeholder="Password"
+        type="password"
+        formControlName="password"
+      />
+    </mat-form-field>
+    <mat-error
+      *ngIf="
+        getFormControl('password').touched &&
+        getFormControl('password').hasError('required')
+      "
+      >Please enter valid password</mat-error
+    >
+
+    <button mat-raised-button color="primary" type="submit" style="width: 100%">
+      Login
+    </button>
+  </form>
+</mat-card>

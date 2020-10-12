@@ -13,13 +13,13 @@ import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { transformedPostsResponse } from '../Models/transformedPostsResponse.model';
 
-interface postsResponse {
+interface PostsResponse {
   message?: string;
   posts: Array<any>;
   totalPostCount: number;
 }
 
-interface postResponse {
+interface PostResponse {
   message: string;
   post: Post;
 }
@@ -44,7 +44,7 @@ export class PostsService {
   getPosts(page: Page) {
     const queryParams = `?pageSize=${page.pageSize}&currentPage=${page.pageIndex}`;
     this.httpClient
-      .get<postsResponse>('http://localhost:3000/api/posts' + queryParams)
+      .get<PostsResponse>('http://localhost:3000/api/posts' + queryParams)
       .pipe(
         map((res) => {
           return {
@@ -71,7 +71,7 @@ export class PostsService {
   }
 
   getPost(postId: string) {
-    return this.httpClient.get<postResponse>(
+    return this.httpClient.get<PostResponse>(
       'http://localhost:3000/api/posts/' + postId
     );
   }
@@ -82,7 +82,7 @@ export class PostsService {
     postFormData.append('content', post.content);
     postFormData.append('image', post.image, post.title);
     this.httpClient
-      .post<postResponse>('http://localhost:3000/api/posts', postFormData)
+      .post<PostResponse>('http://localhost:3000/api/posts', postFormData)
       .subscribe((response) => {
         // this.posts.push(response.post);
         // this.postsUpdated.next([...this.posts]);

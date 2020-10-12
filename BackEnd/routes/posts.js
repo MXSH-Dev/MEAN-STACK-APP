@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Post = require("../Models/post");
+const checkAuth = require("../middlewares/check-auth");
 
 const multer = require("multer");
 
@@ -75,6 +76,7 @@ router.get("/:id", (req, res, next) => {
 
 router.post(
   "",
+  checkAuth,
   multer({ storage: storage }).single("image"),
   (req, res, next) => {
     const url = req.protocol + "://" + req.get("host");
@@ -104,7 +106,7 @@ router.post(
   }
 );
 
-router.delete("/:id", (req, res, next) => {
+router.delete("/:id", checkAuth, (req, res, next) => {
   console.log(req.params.id);
   Post.deleteOne({ _id: req.params.id })
     .then((result) => {
@@ -118,6 +120,7 @@ router.delete("/:id", (req, res, next) => {
 
 router.put(
   "/:id",
+  checkAuth,
   multer({ storage: storage }).single("image"),
   (req, res, next) => {
     console.log("FILE TYPE:", req.file);

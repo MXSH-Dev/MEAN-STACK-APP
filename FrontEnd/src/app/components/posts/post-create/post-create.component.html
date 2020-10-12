@@ -1,3 +1,4 @@
+<br />
 <mat-card>
   <app-spinner *ngIf="isLoading"></app-spinner>
   <form
@@ -30,7 +31,7 @@
         mat-card-image
         [src]="imgPreviewUrl"
         alt="IMAGE"
-        style="display: flex; margin: auto; width: 90%"
+        style="display: flex; margin: auto; max-width: 450px"
       />
       <mat-card-actions>
         <div style="display: inline-block; width: 50%">
@@ -38,14 +39,29 @@
             mat-flat-button
             type="button"
             (click)="postImagePicker.click($event)"
-            style="width: 90%"
+            style="
+              display: flex;
+              justify-content: center;
+              margin: auto;
+              width: 80%;
+            "
             color="accent"
           >
             Pick Image
           </button>
         </div>
         <div style="display: inline-block; width: 50%">
-          <button mat-flat-button type="button" style="width: 90%" color="warn">
+          <button
+            mat-flat-button
+            type="button"
+            style="
+              display: flex;
+              justify-content: center;
+              margin: auto;
+              width: 80%;
+            "
+            color="warn"
+          >
             Reset Image
           </button>
         </div>

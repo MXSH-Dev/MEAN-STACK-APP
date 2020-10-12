@@ -1,0 +1,84 @@
+<br />
+<mat-card style="max-width: 50rem; display: block; margin: auto">
+  <app-spinner *ngIf="isLoading"></app-spinner>
+  <form
+    *ngIf="!isLoading"
+    [formGroup]="registerForm"
+    (ngSubmit)="registerNewUser()"
+  >
+    <mat-form-field>
+      <!-- <mat-label>Title</mat-label> -->
+      <input
+        matInput
+        placeholder="E-mail"
+        type="email"
+        formControlName="email"
+      />
+    </mat-form-field>
+    <mat-error
+      *ngIf="
+        (getFormControl('email').touched &&
+          getFormControl('email').hasError('required')) ||
+        (getFormControl('email').touched &&
+          getFormControl('email').hasError('email'))
+      "
+      >Please enter a valid email!</mat-error
+    >
+
+    <mat-form-field>
+      <!-- <mat-label>Title</mat-label> -->
+      <input
+        matInput
+        placeholder="User Name"
+        type="text"
+        formControlName="username"
+      />
+    </mat-form-field>
+    <mat-error
+      *ngIf="
+        getFormControl('username').touched &&
+        getFormControl('username').hasError('required')
+      "
+      >Please enter valid User Name!</mat-error
+    >
+
+    <mat-form-field>
+      <!-- <mat-label>Title</mat-label> -->
+      <input
+        matInput
+        placeholder="Password"
+        type="password"
+        formControlName="password"
+      />
+    </mat-form-field>
+    <mat-error
+      *ngIf="
+        getFormControl('password').touched &&
+        getFormControl('password').hasError('required')
+      "
+      >Please enter valid Password!</mat-error
+    >
+
+    <mat-form-field>
+      <!-- <mat-label>Title</mat-label> -->
+      <input
+        matInput
+        placeholder="Confirm Password"
+        type="password"
+        formControlName="passwordConfirm"
+      />
+    </mat-form-field>
+    <mat-error
+      *ngIf="
+        (getFormControl('passwordConfirm').touched &&
+          getFormControl('passwordConfirm').hasError('required')) ||
+        (getFormControl('passwordConfirm').touched && !passwordMatch)
+      "
+      >Passwords Does Not Match!</mat-error
+    >
+
+    <button mat-raised-button color="primary" type="submit" style="width: 100%">
+      Sign Up
+    </button>
+  </form>
+</mat-card>
