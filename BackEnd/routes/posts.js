@@ -79,11 +79,14 @@ router.post(
   checkAuth,
   multer({ storage: storage }).single("image"),
   (req, res, next) => {
+    // console.log(req.userData);
+    // return res.status(200);
     const url = req.protocol + "://" + req.get("host");
     const newPost = new Post({
       title: req.body.title,
       content: req.body.content,
       imagePath: url + "/images/" + req.file.filename,
+      creator: req.userData.userId,
     });
     // console.log(post);
     newPost
@@ -97,6 +100,7 @@ router.post(
             title: newPost.title,
             content: newPost.content,
             imagePath: newPost.imagePath,
+            creator: req.userData.userId,
           },
         });
       })
@@ -108,9 +112,13 @@ router.post(
 
 router.delete("/:id", checkAuth, (req, res, next) => {
   console.log(req.params.id);
-  Post.deleteOne({ _id: req.params.id })
+  Post.deleteOne({ _id: req.params.id, creator: req.userData.userId })
     .then((result) => {
       console.log(result);
+      if (result.n === 0) {
+        res.status(401).json({ message: "Not Authorized" });
+        return;
+      }
       res.status(200).json({ message: "Post deleted" });
     })
     .catch((err) => {
@@ -133,6 +141,7 @@ router.put(
         title: req.body.title,
         content: req.body.content,
         imagePath: url + "/images/" + req.file.filename,
+        creator: req.userData.userId,
       });
     } else {
       newPost = new Post({
@@ -140,14 +149,23 @@ router.put(
         title: req.body.title,
         content: req.body.content,
         imagePath: req.body.imagePath,
+        creator: req.userData.userId,
       });
     }
 
     console.log("updated post:", newPost);
 
-    Post.updateOne({ _id: req.params.id }, newPost)
+    Post.updateOne(
+      { _id: req.params.id, creator: req.userData.userId },
+      newPost
+    )
       .then((result) => {
         console.log(result);
+
+        if (result.nModified === 0) {
+          res.status(401).json({ message: "Not Authorized" });
+          return;
+        }
         res.status(200).json({ message: "Post updated" });
       })
       .catch((err) => {

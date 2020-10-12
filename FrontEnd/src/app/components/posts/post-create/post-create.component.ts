@@ -7,6 +7,7 @@ import {
   MatSnackBarVerticalPosition,
 } from '@angular/material/snack-bar';
 
+import { AuthService } from 'src/app/services/auth.service';
 import { Post } from '../../../Models/post.model';
 import { PostsService } from '../../../services/posts.service';
 import { mimeType } from './mime-type.validator';
@@ -35,7 +36,8 @@ export class PostCreateComponent implements OnInit {
   constructor(
     private _snackBar: MatSnackBar,
     private postService: PostsService,
-    public activatedRoute: ActivatedRoute
+    public activatedRoute: ActivatedRoute,
+    private _authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -79,6 +81,7 @@ export class PostCreateComponent implements OnInit {
         title: this.postFormGroup.value.title,
         content: this.postFormGroup.value.content,
         image: this.postFormGroup.value.image,
+        creator: this._authService.getUserId(),
       };
       this.postService.addPost(post);
     } else if (this.mode === 'edit') {
@@ -87,6 +90,7 @@ export class PostCreateComponent implements OnInit {
         title: this.postFormGroup.value.title,
         content: this.postFormGroup.value.content,
         image: this.postFormGroup.value.image,
+        creator: this._authService.getUserId(),
       };
       this.postService.updatePost(post);
     }

@@ -19,6 +19,7 @@ router.post("/register", (req, res, next) => {
       newUser
         .save()
         .then((result) => {
+          console.log(result);
           res.status(201).json({
             message: "user created",
             result: result,
@@ -70,6 +71,7 @@ router.post("/login", (req, res, next) => {
         message: "Login success!",
         token: token,
         expiresIn: 3600,
+        userId: fetchedUser._id,
       });
     })
     .catch((err) => {

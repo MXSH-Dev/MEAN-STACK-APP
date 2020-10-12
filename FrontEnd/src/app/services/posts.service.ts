@@ -54,6 +54,7 @@ export class PostsService {
                 content: post.content,
                 id: post._id,
                 imagePath: post.imagePath,
+                creator: post.creator,
               };
             }),
             totalPostCount: res.totalPostCount,
@@ -62,11 +63,11 @@ export class PostsService {
       )
       .subscribe((transformedPostData) => {
         this.posts = transformedPostData.posts;
-        const updatedTramsformedPostData: transformedPostsResponse = {
+        const updatedTransformedPostData: transformedPostsResponse = {
           posts: this.posts,
           totalPostCount: transformedPostData.totalPostCount,
         };
-        this.postsUpdated.next(updatedTramsformedPostData);
+        this.postsUpdated.next(updatedTransformedPostData);
       });
   }
 
@@ -97,12 +98,14 @@ export class PostsService {
       id: post.id,
       title: post.title,
       content: post.content,
+      creator: null,
     };
     if (typeof post.image === 'object') {
       const postFormData = new FormData();
       postFormData.append('title', post.title);
       postFormData.append('content', post.content);
       postFormData.append('image', post.image, post.title);
+      postFormData.append('creator', null);
       postData = postFormData;
     } else {
       postData = updatedPostWithoutNewImage;
