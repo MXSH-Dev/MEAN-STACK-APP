@@ -1,5 +1,5 @@
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   MatSnackBar,
@@ -10,6 +10,7 @@ import {
 import { AuthService } from 'src/app/services/auth.service';
 import { Post } from '../../../Models/post.model';
 import { PostsService } from '../../../services/posts.service';
+import { Subscription } from 'rxjs';
 import { mimeType } from './mime-type.validator';
 
 @Component({
@@ -17,7 +18,7 @@ import { mimeType } from './mime-type.validator';
   templateUrl: './post-create.component.html',
   styleUrls: ['./post-create.component.css'],
 })
-export class PostCreateComponent implements OnInit {
+export class PostCreateComponent implements OnInit, OnDestroy {
   public postFormGroup = new FormGroup({
     title: new FormControl('', [Validators.required]),
     content: new FormControl('', [Validators.required]),
@@ -32,6 +33,7 @@ export class PostCreateComponent implements OnInit {
   public mode: string = 'create';
   private postId: string = null;
   public isLoading: boolean = false;
+  private authStatusSubscription: Subscription;
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -41,6 +43,11 @@ export class PostCreateComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.authStatusSubscription = this._authService
+      .getAuthStatusListener()
+      .subscribe((authStatus) => {
+        this.isLoading = false;
+      });
     this.activatedRoute.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has('postId')) {
         this.mode = 'edit';
@@ -64,6 +71,10 @@ export class PostCreateComponent implements OnInit {
         this.postId = null;
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.authStatusSubscription.unsubscribe();
   }
 
   onSavePost() {

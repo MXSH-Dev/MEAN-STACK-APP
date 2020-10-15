@@ -10,6 +10,7 @@ import { Page } from '../Models/page.model';
 import { Post } from '../Models/post.model';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
+import { environment } from '../../environments/environment';
 import { map } from 'rxjs/operators';
 import { transformedPostsResponse } from '../Models/transformedPostsResponse.model';
 
@@ -44,7 +45,7 @@ export class PostsService {
   getPosts(page: Page) {
     const queryParams = `?pageSize=${page.pageSize}&currentPage=${page.pageIndex}`;
     this.httpClient
-      .get<PostsResponse>('http://localhost:3000/api/posts' + queryParams)
+      .get<PostsResponse>(environment.API_URL + '/posts' + queryParams)
       .pipe(
         map((res) => {
           return {
@@ -73,7 +74,7 @@ export class PostsService {
 
   getPost(postId: string) {
     return this.httpClient.get<PostResponse>(
-      'http://localhost:3000/api/posts/' + postId
+      environment.API_URL + '/posts/' + postId
     );
   }
 
@@ -83,7 +84,7 @@ export class PostsService {
     postFormData.append('content', post.content);
     postFormData.append('image', post.image, post.title);
     this.httpClient
-      .post<PostResponse>('http://localhost:3000/api/posts', postFormData)
+      .post<PostResponse>(environment.API_URL + '/posts', postFormData)
       .subscribe((response) => {
         // this.posts.push(response.post);
         // this.postsUpdated.next([...this.posts]);
@@ -111,7 +112,7 @@ export class PostsService {
       postData = updatedPostWithoutNewImage;
     }
     this.httpClient
-      .put('http://localhost:3000/api/posts/' + post.id, postData)
+      .put(environment.API_URL + '/posts/' + post.id, postData)
       .subscribe((response) => {
         // console.log(response);
         // const updatedPosts = [...this.posts];
@@ -125,7 +126,7 @@ export class PostsService {
   }
 
   deletePost(postId: string) {
-    return this.httpClient.delete('http://localhost:3000/api/posts/' + postId);
+    return this.httpClient.delete(environment.API_URL + '/posts/' + postId);
   }
 
   openSnackBar(

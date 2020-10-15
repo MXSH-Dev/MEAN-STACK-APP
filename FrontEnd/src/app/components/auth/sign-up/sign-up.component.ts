@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   MatSnackBar,
@@ -8,13 +8,14 @@ import {
 
 import { AuthService } from '../../../services/auth.service';
 import { NewUser } from '../../../Models/new-user.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.css'],
 })
-export class SignUpComponent implements OnInit {
+export class SignUpComponent implements OnInit, OnDestroy {
   isLoading: boolean = false;
   passwordMatch: boolean = false;
   registerForm: FormGroup = new FormGroup({
@@ -28,17 +29,28 @@ export class SignUpComponent implements OnInit {
     }),
   });
 
+  private authStatusSubscription: Subscription;
+
   constructor(
     private _authService: AuthService,
     private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
+    this.authStatusSubscription = this._authService
+      .getAuthStatusListener()
+      .subscribe((authStatus) => {
+        this.isLoading = false;
+      });
     this.getFormControl('passwordConfirm').valueChanges.subscribe((value) => {
       if (value === this.getFormControl('password').value) {
         this.passwordMatch = true;
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.authStatusSubscription.unsubscribe();
   }
 
   registerNewUser() {
@@ -56,7 +68,7 @@ export class SignUpComponent implements OnInit {
       username: this.getFormControl('username').value,
       password: this.getFormControl('password').value,
     };
-
+    this.isLoading = true;
     this._authService.createNewUser(newUser);
   }
 

@@ -29,6 +29,7 @@
   MONGODB_USER = <USER NAME>
   MONGODB_PASSWORD <PASSWORD>
   MONGODB_URI_POST = "@mean-cluster.qyd3m.mongodb.net/mean-stack?retryWrites=true&w=majority"
+  JWT_SECRET_KEY = <STRING used for JWT Hashing>
   ```
 
   - It is ok to expose username and password by accident since only certain IP is added to IP while list

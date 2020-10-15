@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   MatSnackBar,
@@ -8,13 +8,14 @@ import {
 
 import { AuthService } from '../../../services/auth.service';
 import { LoginUserData } from '../../../Models/user.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   isLoading = false;
   loginForm: FormGroup = new FormGroup({
     email: new FormControl(null, {
@@ -23,12 +24,24 @@ export class LoginComponent implements OnInit {
     password: new FormControl(null, { validators: [Validators.required] }),
   });
 
+  private authStatusSubscription: Subscription;
+
   constructor(
     private _authService: AuthService,
     private _snackBar: MatSnackBar
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.authStatusSubscription = this._authService
+      .getAuthStatusListener()
+      .subscribe((authStatus) => {
+        this.isLoading = false;
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.authStatusSubscription.unsubscribe();
+  }
 
   login() {
     if (this.loginForm.invalid) {
@@ -46,6 +59,7 @@ export class LoginComponent implements OnInit {
       password: this.getFormControl('password').value,
     };
     this._authService.login(userData);
+    this.isLoading = true;
   }
 
   getFormControl(controlName: string) {
